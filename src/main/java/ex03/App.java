@@ -26,7 +26,7 @@ public class App {
 
                 for (int i = 0; i < parameters.length; i++) {
                     Parameter parameter = parameters[i];
-                    if (parameter.isAnnotationPresent(Principle.class)) {
+                    if (parameter.isAnnotationPresent(Principal.class)) {
                         invokeArgs[i] = SessionUser.getInstance();
                     } else {
                         invokeArgs[i] = Model.getInstance();

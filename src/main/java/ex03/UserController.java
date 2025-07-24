@@ -4,7 +4,7 @@ package ex03;
 public class UserController {
 
     @RequestMapping("/userinfo")
-    public void userinfo(@Principle SessionUser sessionUser) {
+    public void userinfo(@Principal SessionUser sessionUser) {
         System.out.println(sessionUser.getId());
         System.out.println(sessionUser.getUsername());
         System.out.println("userinfo 호출됨");
