@@ -21,38 +21,22 @@ public class App {
 
             // 1. 메서드 찾기
             if (rm.value().equals(path)) {
-                // 2. 메서드의 파라미터 여부 확인
-                if (method.getParameterCount() != 0) {
-                    // 파라미터가 있는 경우
-                    Parameter[] parameters = method.getParameters();
-                    for (Parameter parameter : parameters) {
-                        if (parameter.isAnnotationPresent(Principle.class)) {
-                            try {
-                                method.invoke(uc, SessionUser.getInstance());
-                            } catch (IllegalAccessException e) {
-                                throw new RuntimeException(e);
-                            } catch (InvocationTargetException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else {
-                            try {
-                                method.invoke(uc, Model.getInstance());
-                            } catch (IllegalAccessException e) {
-                                throw new RuntimeException(e);
-                            } catch (InvocationTargetException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
+                Object[] invokeArgs = new Object[method.getParameterCount()];
+                Parameter[] parameters = method.getParameters();
+
+                for (int i = 0; i < parameters.length; i++) {
+                    Parameter parameter = parameters[i];
+                    if (parameter.isAnnotationPresent(Principle.class)) {
+                        invokeArgs[i] = SessionUser.getInstance();
+                    } else {
+                        invokeArgs[i] = Model.getInstance();
                     }
-                } else {
-                    // 파라미터가 없는 경우
-                    try {
-                        method.invoke(uc);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    }
+                }
+
+                try {
+                    method.invoke(uc, invokeArgs);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
